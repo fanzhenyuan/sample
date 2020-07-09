@@ -1,0 +1,13 @@
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="col-md-4"> 
+    <section class="user_info">
+        <h1>
+          <!--gravatar_for 的辅助方法，返回指定用户的 Gravatar 头像-->
+          <!--gravatar_for 方法放在 Users 控制器对应的辅助方法文件中-->
+          <%= gravatar_for @user %>
+          <%= @user.name %> 
+        </h1>
+    </section>
+  </aside>
+</div>

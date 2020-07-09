@@ -1,3 +1,37 @@
+<!--form_with 辅助方法，传入 Active Record 对象后，使用该对象的属性构建一个表单-->
 <% provide(:title, 'Sign-up') %>
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<h1>Sign-up</h1>
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <!--form_with 方法接受一个块-->
+    <%= form_with(model: @user, local: true) do |f| %> 
+    <!--注册错误视图-->
+    <%= render 'shared/error_messages'%>
+    
+    <!--f 对象的作用是什么:在 这个对象上调用表单字段(例如，文本字段、
+    单选按钮或密码字段)对应的方法，生成的字段元素可以用来 设定 @user 对象的属性-->
+      
+          <!--<label for="user_name">Name</label>
+          <input id="user_name" name="user[name]" type="text" />-->
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control' %>
+      
+          <!--<label for="user_email">Email</label>
+          <input id="user_email" name="user[email]" type="email" />-->
+          <!-- name 属性的值为键，用户输入的内容为值，构成一个名为 params 的散列，用
+          来创建用户。-->
+      <%= f.label :email %>
+      <%= f.email_field :email, class: 'form-control' %>
+      
+      <%= f.label :password %>
+      <%= f.password_field :password, class: 'form-control' %>
+      
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, class: 'form-control' %>
+      
+      <%= f.submit "Create", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

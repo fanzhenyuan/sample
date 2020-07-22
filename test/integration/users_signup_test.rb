@@ -25,14 +25,16 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     get signup_path
     assert_difference 'User.count', 1 do
       post users_path, params: { user: { name: "fanfanfan",
-                                         email: "fanzunwen@hotmail.com",
+                                         email: "user@example.com",
                                          password: "password",
                                          password_confirmation: "password" }}
     end
     #follow_redirect! 方法跟踪重定向，渲染 users/show 模板
-    #follow_redirect!
-    #assert_template 'users/show'
+    follow_redirect!
+    assert_template 'users/show'
     #测试闪现消息不为空
-    #assert_not flash.empty?
+    assert_not flash.empty?
+    #测试组册后自动登录
+    assert is_logged_in?
   end
 end

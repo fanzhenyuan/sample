@@ -10,8 +10,11 @@ class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
-  #引入helper方法
+  #引入helper full_title方法
   include ApplicationHelper
 
-  # Add more helper methods to be used by all tests here...
+  #引入helper 与logged_in? 一样
+  def is_logged_in?
+    !session[:user_id].nil?
+  end 
 end

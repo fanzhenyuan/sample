@@ -74,4 +74,12 @@ class UserTest < ActiveSupport::TestCase
     @user.password = @user.password_confirmation = "a" * 5
     assert_not @user.valid?
   end
+  
+  #不同的浏览器，在集成测试中很难模拟，不过直接在 User 模型层测试很简单
+  #cookie 中的用户 ID 仍然存在
+  # 2浏览器 一个退出 一个关闭在打开，digest变nil了，BCrypt::Password.new(nil) 会抛出异常，所以测试组件不能通过:
+  #空记忆令牌，因为还没用到这个值之前就会发生错误
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?('')
+  end 
 end

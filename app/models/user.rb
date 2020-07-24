@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  #可存取的属性
+  attr_accessor :remember_token
   #before_save { self.email = email.downcase}
   before_save { email.downcase! }
   
@@ -13,10 +15,33 @@ class User < ApplicationRecord
   #只会验证有没有密码 空string可以
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }  
+  
   #返回指定字符串的哈希摘要
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : 
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
+  end
+  
+  #返回随机令牌 string
+  def User.new_token
+    SecureRandom.urlsafe_base64
+  end 
+  
+  def remember
+    #使用 self 的目的是确保把值赋 给用户的 remember_token 属性
+    self.remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(remember_token))
+  end
+  
+  def authenticated?(remember_token)
+    return false if remember_digest.nil?
+    #self.remember_digest
+    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  end 
+  
+  #撤销 user.remember 方法的操作
+  def forget
+    update_attribute(:remember_digest, nil)
   end 
 end

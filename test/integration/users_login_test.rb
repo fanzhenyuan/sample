@@ -6,7 +6,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end 
   
-  #测试成功登录
+  #测试bu成功登录
   test "invalid login" do
     get login_path
     assert_template 'sessions/new'
@@ -33,14 +33,21 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "[href=?]", login_path, count: 0
     assert_select "[href=?]", logout_path
     assert_select "[href=?]", user_path(@user)
-    
     delete logout_path
     assert_not is_logged_in?
+    assert_redirected_to root_url
+    follow_redirect!
+    
+    delete logout_path
     assert_redirected_to root_url
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path, count: 0 
     assert_select "a[href=?]", user_path(@user), count: 0
+    #follow_redirect!
+    #assert_select "a[href=?]", login_path
+    #assert_select "a[href=?]", logout_path, count: 0 
+    #assert_select "a[href=?]", user_path(@user), count: 0
   end
   
   
@@ -61,5 +68,19 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   #测试退出
   test "destroy action" do
     
+  end
+  
+  #测试 cookie 中相关的值是不是 nil
+  test "remember_me = 1" do
+    log_in_as(@user, remember_me: '1')
+    #assert_not_empty cookies[:remember_token]
+    # cookie 中的值是否等于用户的记忆令牌
+    assert_equal cookies[:remember_token], assigns(:user).remember_token
+  end
+  
+  test "remember_me = 0" do
+    log_in_as(@user, remember_me: '1')
+    log_in_as(@user, remember_me: '0')
+    assert_empty cookies[:remember_token]
   end
 end

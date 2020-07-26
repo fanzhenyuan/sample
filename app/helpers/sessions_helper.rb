@@ -42,4 +42,23 @@ module SessionsHelper
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
   end 
+  
+  #用户是否是当前用户在操作, 防止nil
+  def current_user?(user)
+    user && user == current_user
+  end 
+  
+  # 重定向到存储的地址或者默认地址
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    session.delete(:forwarding_url)
+  end 
+  
+  #存储后来需要使用的网址
+  def store_location
+    #使用 session 存储转向地址
+    # request 对 象，获取所请求页面的地址(request.original_url)
+    session[:forwarding_url] = request.original_url if request.get?
+    #session[:forwarding_url] = request.original_url 
+  end 
 end

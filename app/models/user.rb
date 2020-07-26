@@ -12,9 +12,9 @@ class User < ApplicationRecord
                     #uniqueness: { case_sensitive: false}
                     uniqueness: true
   
-  #只会验证有没有密码 空string可以
+  #密码为 nil 时能通过存在性验证，可是会被 has_secure_password 方法的验证捕获
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }  
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true  
   
   #返回指定字符串的哈希摘要
   def User.digest(string)

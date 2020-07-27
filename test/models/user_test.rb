@@ -80,6 +80,6 @@ class UserTest < ActiveSupport::TestCase
   # 2浏览器 一个退出 一个关闭在打开，digest变nil了，BCrypt::Password.new(nil) 会抛出异常，所以测试组件不能通过:
   #空记忆令牌，因为还没用到这个值之前就会发生错误
   test "authenticated? should return false for a user with nil digest" do
-    assert_not @user.authenticated?('')
+    assert_not @user.authenticated?(:remember, '')
   end 
 end

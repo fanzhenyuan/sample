@@ -8,13 +8,14 @@ class UsersController < ApplicationController
   def index
     #@user = User.all fenye
     #params 中的这个键由 will_pagenate 自动生成。
-    @users = User.paginate(page: params[:page])
+    #只显示已激活用户的代码模板
+    @users = User.where(activated: true).paginate(page: params[:page])
   end 
   
   def show
     #params[:id] 返回的是字符串 "1"，不过 find 方法会自动将其转换成整数。
     @user = User.find(params[:id])
-    #debugger
+    redirect_to root_url and return unless @user.activated?
   end
   
   #注册页
@@ -23,6 +24,8 @@ class UsersController < ApplicationController
   end
   
   #注册内部
+  #因为现在重定向到根地址而不是资料页面，不会像之前那样自动登入用户，
+  #所以测试组件无法通过，不过应用能按照我们设计的方式运行。我们暂时把导致失败的测试注释掉
   def create
     @user = User.new(user_params)
     if @user.save
@@ -32,10 +35,16 @@ class UsersController < ApplicationController
       #重新请求
       
       #最开始 注册后登录
-      log_in(@user)
-      flash[:success] = "WELCOME!"
+      #log_in(@user)
+      #flash[:success] = "WELCOME!"
       # 重定向 redirect_to user_url(@user)
-      redirect_to @user
+      #redirect_to @user
+      
+      #把处理用户的代码从控制器中移出， 放入模型
+      @user.send_activation_email
+      
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
     else
       #new action 传入@user
       render 'new'

@@ -9,14 +9,21 @@ class SessionsController < ApplicationController
     #电子邮件地址都是以小写字母形式保存的，所以这里调用了 downcase 方法，
     #确保提交有效的地址后能查到相应的记录
     if @user && @user.authenticate(params[:session][:password])
-      log_in @user
-      #user_url(@user)
-      #现在可以记住用户的登录状态了。我们要在 log_in 后面调用 remember 辅助方法
-      #remember user 
-      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      #redirect_to @user 
-      #登录后访问之前的页面 / 原始deafault
-      redirect_back_or @user
+      #以激活的才可以登录
+      if @user.activated?
+        log_in @user
+        #user_url(@user)
+        #现在可以记住用户的登录状态了。我们要在 log_in 后面调用 remember 辅助方法
+        #remember user 
+        params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+        #redirect_to @user 
+        #登录后访问之前的页面 / 原始deafault
+        redirect_back_or @user
+      else
+        message = "no aktiv"
+        flash[:warning] = message
+        redirect_to root_url
+      end 
     else
       #会话不是 Active Record 模型
       #而重新渲染页面(使用 render 方法)与重定向不同，不算是一次新请求

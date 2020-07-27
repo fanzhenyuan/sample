@@ -1,4 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  #默认的发件人地址
+  default from: "noreply@example.com"
   layout 'mailer'
 end

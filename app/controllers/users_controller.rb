@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     #params[:id] 返回的是字符串 "1"，不过 find 方法会自动将其转换成整数。
     @user = User.find(params[:id])
     redirect_to root_url and return unless @user.activated?
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
   
   #注册页
@@ -69,15 +70,15 @@ class UsersController < ApplicationController
   end
   
   #权限,没登录时候要去登录
-  def logged_in_user
-    unless logged_in?
-      #存储
-      store_location
+  #def logged_in_user
+  #  unless logged_in?
+  #    #存储
+  #    store_location
     
-      flash[:danger] = "Please log in."
-      redirect_to login_url
-    end 
-  end 
+  #    flash[:danger] = "Please log in."
+  #    redirect_to login_url
+  #  end 
+  #end 
   
   #重定向到试图编辑其他用户资料的用户
   def correct_user

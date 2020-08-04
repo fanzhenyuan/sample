@@ -1,0 +1,7 @@
+<% if @feed_items.any? %> 
+  <ol class="microposts">
+    <%= render @feed_items %> 
+  </ol>
+<!--尝试访问的是 Microposts 控制 器中不存在的 index 动作-->  
+<%= will_paginate @feed_items, params: { controller: :static_pages, action: :home } %> 
+<% end %>

@@ -8,7 +8,7 @@
     <!--form_with 方法接受一个块-->
     <%= form_with(model: @user, local: true) do |f| %> 
     <!--注册错误视图-->
-    <%= render 'shared/error_messages'%>
+    <%= render 'shared/error_messages', object: f.object %>
     
     <!--f 对象的作用是什么:在 这个对象上调用表单字段(例如，文本字段、
     单选按钮或密码字段)对应的方法，生成的字段元素可以用来 设定 @user 对象的属性-->

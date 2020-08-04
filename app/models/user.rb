@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  #删除用户,微博也delete
+  has_many :microposts, dependent: :destroy 
   #可存取的属性
   attr_accessor :remember_token, :activation_token, :reset_token
   #before_save { self.email = email.downcase}
@@ -75,6 +77,10 @@ class User < ApplicationRecord
   def password_reset_expired?
     reset_sent_at < 2.hours.ago 
   end
+  #初步实现微博动态流
+  def feed
+    Micropost.where("user_id=?", id)
+  end 
   # 创建令牌和摘要
   private
   

@@ -1,5 +1,23 @@
 <% provide(:title, "Home")%>
 
+
+<% if logged_in? %> 
+  <div class="row">
+    <aside class="col-md-4"> 
+      <section class="user_info">
+        <%= render 'shared/user_info' %> 
+      </section>
+      <section class="micropost_form">
+        <%= render 'shared/micropost_form' %> 
+      </section>
+    </aside>
+    <!--在首页加入动态流-->
+    <div class="col-md-8"> 
+      <h3>Micropost Feed</h3>
+      <%= render 'shared/feed' %>
+    </div>
+  </div>
+<% else %>
 <div class="center jumbotron">
   <h1>Welcome</h1>
   <h2>
@@ -10,9 +28,7 @@
   <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %> 
 </div>
 
-<%= link_to image_tag("rails.svg", alt: "Rails logo", width: "200"), "https://rubyonrails.org/" %>
-
-
+<%= link_to image_tag("rails.svg", alt: "Rails logo", width: "200"), 
+"https://rubyonrails.org/" %>
+<% end %>
 <%#= image_tag("kitten.jpg", alt: "Rails logo") %>
-
-

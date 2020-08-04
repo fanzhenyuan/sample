@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_with(model: @user, url: password_reset_path(params[:id]), local: true) do |f| %>
-      <%= render 'shared/error_messages' %>
+      <%= render 'shared/error_messages', object: f.object %>
       <!--隐藏字段，把它的值设为邮件地址(不会显 示)，和表单中的其他数据一起提交给 update 动作-->
       <%= hidden_field_tag :email, @user.email %>
       
